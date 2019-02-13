@@ -9,26 +9,53 @@ public class Switch : MonoBehaviour {
 
     public GameObject[] floors;
 
+    public Vector3 startPos;
+
     bool notSwitchedYet = true;
     bool isChanging = false;
+    bool atEnd = false;
 	// Use this for initialization
 	void Start () {
         floors = GameObject.FindGameObjectsWithTag("Floor");
-	}
+        startPos = start.transform.position;
+    }
 	
 	// Update is called once per frame
 	void Update () {
         if(!notSwitchedYet)
         {
-            if (Vector3.Magnitude(start.transform.position - end.transform.position) >= 0.1 && isChanging)
-                start.transform.Translate(Vector3.down * 10 * Time.deltaTime);
+            if (!atEnd)
+            {
+                if (Vector3.Distance(start.transform.position, end.transform.position) >= 0.1f && isChanging)
+                {
+                    start.transform.position = Vector3.MoveTowards(start.transform.position, end.transform.position, 10f * Time.deltaTime);
+                }
+                else
+                {
+                    isChanging = false;
+                    notSwitchedYet = true;
+                    atEnd = !atEnd;
+
+                    foreach (GameObject floor in floors)
+                        floor.SendMessage("GetAdjacents");
+                }
+            }
             else
             {
-                Debug.Log("Hello");
-                isChanging = false;
-                notSwitchedYet = true;
-                foreach(GameObject floor in floors)
-                    floor.SendMessage("GetAdjacents");
+
+                if (Vector3.Distance(start.transform.position, startPos) >= 0.1f && isChanging)
+                {
+
+                    start.transform.position = Vector3.MoveTowards(start.transform.position, startPos, 10f * Time.deltaTime); 
+                }
+                else
+                {
+                    isChanging = false;
+                    notSwitchedYet = true;
+                    atEnd = !atEnd;
+                    foreach (GameObject floor in floors)
+                        floor.SendMessage("GetAdjacents");
+                }
             }
         }
         
