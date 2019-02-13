@@ -20,7 +20,7 @@ public class Switch : MonoBehaviour {
 	void Update () {
         if(!notSwitchedYet)
         {
-            if (Vector3.Magnitude(start.transform.position - end.transform.position) >= 0.05 && isChanging)
+            if (Vector3.Magnitude(start.transform.position - end.transform.position) >= 0.1 && isChanging)
                 start.transform.Translate(Vector3.down * 10 * Time.deltaTime);
             else
             {
