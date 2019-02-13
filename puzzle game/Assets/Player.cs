@@ -112,6 +112,10 @@ public class Player : MonoBehaviour {
                 }
 
         }
+        else if(body.tag == "Switch")
+        {
+            body.SendMessage("StartSwitch");
+        }
 
         
     }

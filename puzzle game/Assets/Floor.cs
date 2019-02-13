@@ -11,12 +11,7 @@ public class Floor : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-        Vector3 pos = transform.position;
-        adjacents[0] = FindAt(new Vector3(pos.x + 2, pos.y, pos.z));
-        adjacents[1] = FindAt(new Vector3(pos.x, pos.y, pos.z + 2));
-        adjacents[2] = FindAt(new Vector3(pos.x - 2, pos.y, pos.z));
-        adjacents[3] = FindAt(new Vector3(pos.x, pos.y, pos.z - 2));
-
+        GetAdjacents();
         if(gameObject.tag == "Start")
         {
             active = true;
@@ -48,5 +43,54 @@ public class Floor : MonoBehaviour {
         }
 
         return nearest;
+    }
+
+    public void GetAdjacents()
+    {
+        Vector3 pos = transform.position;
+        GameObject temp = null;
+        temp = FindAt(new Vector3(pos.x + 2, pos.y, pos.z));
+        if (temp != null)
+        {
+            if (temp.tag != "Metal" && temp.tag!="Switch")
+                adjacents[0] = temp;
+            else
+                adjacents[0] = null;
+        }
+        else
+            adjacents[0] = null;
+
+        temp = FindAt(new Vector3(pos.x, pos.y, pos.z + 2));
+        if (temp != null)
+        {
+            if (temp.tag != "Metal" && temp.tag != "Switch")
+                adjacents[1] = temp;
+            else
+                adjacents[1] = null;
+        }
+        else
+            adjacents[1] = null;
+
+        temp = FindAt(new Vector3(pos.x - 2, pos.y, pos.z));
+        if (temp != null)
+        {
+            if (temp.tag != "Metal" && temp.tag != "Switch")
+                adjacents[2] = temp;
+            else
+                adjacents[2] = null;
+        }
+        else
+            adjacents[2] = null;
+
+        temp = FindAt(new Vector3(pos.x, pos.y, pos.z - 2));
+        if (temp != null)
+        {
+            if (temp.tag != "Metal" && temp.tag != "Switch")
+                adjacents[3] = temp;
+            else
+                adjacents[3] = null;
+        }
+        else
+            adjacents[3] = null;
     }
 }

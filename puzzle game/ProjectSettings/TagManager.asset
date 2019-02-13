@@ -7,6 +7,8 @@ TagManager:
   - Floor
   - Start
   - End
+  - Metal
+  - Switch
   layers:
   - Default
   - TransparentFX
