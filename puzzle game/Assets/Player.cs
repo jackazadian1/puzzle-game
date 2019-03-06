@@ -64,13 +64,15 @@ public class Player : MonoBehaviour {
         transform.Rotate(0, xMouse, 0);
 
         pitch -= Input.GetAxis("Mouse Y") * 5f;
-        pitch = Mathf.Clamp(pitch,30f,60f);
+        pitch = Mathf.Clamp(pitch,25f,60f);
 
         Quaternion camRotation = Quaternion.Euler(pitch, 0, 0);
 
         fpsCamera.localRotation = camRotation;
 
         checkWin();
+        if (Input.GetKeyDown(KeyCode.R))
+            Application.LoadLevel(Application.loadedLevel);
 	}
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
@@ -81,32 +83,30 @@ public class Player : MonoBehaviour {
             return;
         }
         lastHit = body;
-        if (body.tag == "Floor")
+        if (body.tag == "Floor" || body.tag == "End")
         {
             Floor floor = body.GetComponent<Floor>();
-            bool connectedToEnd = false;
+            
             if (floor.active == false)
                 foreach (GameObject element in floor.adjacents)
                 {
                     if (element != null)
                     {
-                        if(element.tag == "End")
-                        {
-                            connectedToEnd = true;
-                        }
+ 
                         Floor adjacent = element.GetComponent<Floor>();
                         if (adjacent.active == true)
                         {
+                            Debug.Log(body.name);
                             floorGraph.AddVertex(body.name);
                             floorGraph.AddBidirectionalEdge(new Edge<string>(body.name, element.name));
                             floor.active = true;
                             Material mat = body.GetComponent<Renderer>().material;
-                            mat.color = new Color(255, 255, 0);
-                            if(connectedToEnd)
-                            {
-                                floorGraph.AddVertex("End");
-                                floorGraph.AddBidirectionalEdge(new Edge<string>(body.name, "End"));
-                            }
+                            if(body.tag == "Floor")
+                                mat.color = new Color(255, 255, 0);
+                            else
+                                mat.color = new Color(0, 255, 0);
+
+                            break;
                         }
                     }
                 }
@@ -123,7 +123,7 @@ public class Player : MonoBehaviour {
     void checkWin()
     {
         if (floorGraph.ContainsVertex("End"))
-            Debug.Log("WIN");
+            Debug.Log(Time.realtimeSinceStartup);
     }
 
 }
