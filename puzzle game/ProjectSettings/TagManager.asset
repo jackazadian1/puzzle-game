@@ -9,6 +9,7 @@ TagManager:
   - End
   - Metal
   - Switch
+  - DeathTrigger
   layers:
   - Default
   - TransparentFX
