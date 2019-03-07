@@ -3,6 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using MonoGraph;
 using MonoGraph.Algorithms;
+using System;
+using System.Net;
+using System.Net.Mail;
+using System.Net.Security;
+using System.Security.Cryptography.X509Certificates;
 
 public class Player : MonoBehaviour {
 
@@ -21,6 +26,7 @@ public class Player : MonoBehaviour {
 
     GameObject lastHit = null;
 
+    bool hasWon = false;
 
 	// Use this for initialization
 	void Start () {
@@ -59,18 +65,19 @@ public class Player : MonoBehaviour {
 
         cc.Move((move + new Vector3(0,ySpeed,0)) * Time.deltaTime);
 
-        float xMouse = Input.GetAxis("Mouse X")* 5f;
+        float xMouse = Input.GetAxis("Mouse X")* 2f;
 
         transform.Rotate(0, xMouse, 0);
 
-        pitch -= Input.GetAxis("Mouse Y") * 5f;
+        pitch -= Input.GetAxis("Mouse Y") * 2f;
         pitch = Mathf.Clamp(pitch,25f,60f);
 
         Quaternion camRotation = Quaternion.Euler(pitch, 0, 0);
 
         fpsCamera.localRotation = camRotation;
-
-        checkWin();
+        
+        if(!hasWon)
+            checkWin();
         if (Input.GetKeyDown(KeyCode.R))
             Application.LoadLevel(Application.loadedLevel);
 	}
@@ -96,7 +103,6 @@ public class Player : MonoBehaviour {
                         Floor adjacent = element.GetComponent<Floor>();
                         if (adjacent.active == true)
                         {
-                            Debug.Log(body.name);
                             floorGraph.AddVertex(body.name);
                             floorGraph.AddBidirectionalEdge(new Edge<string>(body.name, element.name));
                             floor.active = true;
@@ -123,7 +129,24 @@ public class Player : MonoBehaviour {
     void checkWin()
     {
         if (floorGraph.ContainsVertex("End"))
-            Debug.Log(Time.realtimeSinceStartup);
+        {
+            hasWon = true;
+            String time = Time.realtimeSinceStartup +"";
+
+            addData(PlayerStats.name, time.Substring(0,5), PlayerStats.isGamer + "");
+
+            Application.LoadLevel(Application.loadedLevel + 1);
+        }
+    }
+
+    public void addData(string ID, string time, string isGamer)
+    {
+        WWWForm form = new WWWForm();
+        form.AddField("IDPost",ID+ Application.loadedLevel);
+        form.AddField("timespentPost", time);
+        form.AddField("isGamerPost", isGamer);
+
+        WWW www = new WWW("https://gsnd-6320.000webhostapp.com/gsnd_6320.php", form);
     }
 
 }
