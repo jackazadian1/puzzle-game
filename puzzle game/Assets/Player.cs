@@ -133,7 +133,7 @@ public class Player : MonoBehaviour {
             hasWon = true;
             String time = Time.realtimeSinceStartup +"";
 
-            addData(PlayerStats.name, time.Substring(0,5), PlayerStats.isGamer + "");
+            //addData(PlayerStats.name, time.Substring(0,5), PlayerStats.isGamer + "");
 
             Application.LoadLevel(Application.loadedLevel + 1);
         }

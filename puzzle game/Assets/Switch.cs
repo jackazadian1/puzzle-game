@@ -28,7 +28,7 @@ public class Switch : MonoBehaviour {
             {
                 if (Vector3.Distance(start.transform.position, end.transform.position) >= 0.1f && isChanging)
                 {
-                    start.transform.position = Vector3.MoveTowards(start.transform.position, end.transform.position, 10f * Time.deltaTime);
+                    start.transform.position = Vector3.MoveTowards(start.transform.position, end.transform.position, 5f * Time.deltaTime);
                 }
                 else
                 {
@@ -46,7 +46,7 @@ public class Switch : MonoBehaviour {
                 if (Vector3.Distance(start.transform.position, startPos) >= 0.1f && isChanging)
                 {
 
-                    start.transform.position = Vector3.MoveTowards(start.transform.position, startPos, 10f * Time.deltaTime); 
+                    start.transform.position = Vector3.MoveTowards(start.transform.position, startPos, 5f * Time.deltaTime); 
                 }
                 else
                 {
